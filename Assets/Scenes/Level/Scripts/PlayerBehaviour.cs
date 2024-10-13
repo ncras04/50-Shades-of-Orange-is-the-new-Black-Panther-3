@@ -49,19 +49,19 @@ public class PlayerBeha : MonoBehaviour
         // Directional Movement
         if (Input.GetKey(KeyCode.W))
         {
-            playerMove.AddForce(-moveForce, vel.y, vel.z);
+            playerMove.AddForce(-moveForce * Time.deltaTime, vel.y, vel.z);
         }
         if (Input.GetKey(KeyCode.S))
         {
-            playerMove.AddForce(moveForce, vel.y, vel.z);
+            playerMove.AddForce(moveForce * Time.deltaTime, vel.y, vel.z);
         }
         if (Input.GetKey(KeyCode.A))
         {
-            playerMove.AddForce(vel.x, vel.y, -moveForce);
+            playerMove.AddForce(vel.x, vel.y, -moveForce * Time.deltaTime);
         }
         if (Input.GetKey(KeyCode.D))
         {
-            playerMove.AddForce(vel.x, vel.y, moveForce);
+            playerMove.AddForce(vel.x, vel.y, moveForce * Time.deltaTime);
         }
     }
 
