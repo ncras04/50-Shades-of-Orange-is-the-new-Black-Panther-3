@@ -59,7 +59,7 @@ public class ColorChanger : MonoBehaviour, INotifyProperty<Color>
             m_skyboxMaterial.SetColor("_ColorMax", resultColor);
             PropertyChanged?.Invoke(resultColor);
 
-            if (MathF.Round(vel.x, 1) == 0.0f)
+            if (MathF.Round(vel.x, 3) == 0.0f)
                 break;
 
             yield return null;
