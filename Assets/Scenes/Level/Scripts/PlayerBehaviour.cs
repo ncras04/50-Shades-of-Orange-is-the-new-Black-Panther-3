@@ -1,6 +1,7 @@
 using System;
 using UnityEditor.PackageManager;
 using UnityEngine;
+using UnityEngine.VFX;
 
 
 public class PlayerBeha : MonoBehaviour, INotifyProperty<float>
@@ -14,6 +15,12 @@ public class PlayerBeha : MonoBehaviour, INotifyProperty<float>
     private AudioSource m_jump;
     [SerializeField]
     private AudioSource m_ground;
+
+    [SerializeField]
+    private VisualEffect vfx;
+
+    [SerializeField]
+    private LayerMask mask;
 
 
 
@@ -42,6 +49,9 @@ public class PlayerBeha : MonoBehaviour, INotifyProperty<float>
                 if (isGrounded)
                 {
                     m_ground.Play();
+                    vfx.SetVector3("PlayerPos", rayCastOrigin.position);
+                    vfx.Play();
+
                     RaisePropertyChanged();
                 }
             }
@@ -51,7 +61,7 @@ public class PlayerBeha : MonoBehaviour, INotifyProperty<float>
     private void RaisePropertyChanged()
     {
         RaycastHit hitInfo;
-        Physics.Raycast(rayCastOrigin.position, Vector3.down, out hitInfo, 0.01f);
+        Physics.SphereCast(transform.position, .3f, Vector3.down, out hitInfo, 1f, mask);
 
         if (hitInfo.collider is null)
             return;
@@ -102,7 +112,7 @@ public class PlayerBeha : MonoBehaviour, INotifyProperty<float>
 
     private void FixedUpdate()
     {
-        if (Physics.Raycast(rayCastOrigin.position, Vector3.down, 0.01f) && Mathf.Abs(playerMove.velocity.y) < 0.01f) //0.01f hat sich als gut erwiesen
+        if (Physics.SphereCast(transform.position, .3f, Vector3.down, out _, 1f, mask) && playerMove.velocity.y < 0.01f) //0.01f hat sich als gut erwiesen
         {
             IsGrounded = true;
         }
