@@ -1,19 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
+using System;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 
-public class PlayerBeha : MonoBehaviour
+public class PlayerBeha : MonoBehaviour, INotifyProperty<float>
 {
     [SerializeField] float jumpForce = 100;
     [SerializeField] float moveForce = 5;
     [SerializeField] float velocity = 1;
     [SerializeField] Transform rayCastOrigin;
 
+    [SerializeField]
+    private AudioSource m_jump;
+    [SerializeField]
+    private AudioSource m_ground;
+
+
+
     Rigidbody playerMove;
-
-
     public void OnCollisionEnter(Collision col)
     {
         bool isColliding = true;
@@ -26,7 +30,38 @@ public class PlayerBeha : MonoBehaviour
     }
 
     bool isGrounded;
+
+    public bool IsGrounded
+    {
+        get => isGrounded;
+        private set
+        {
+            if (isGrounded != value)
+            {
+                isGrounded = value;
+                if (isGrounded)
+                {
+                    m_ground.Play();
+                    RaisePropertyChanged();
+                }
+            }
+        }
+    }
+
+    private void RaisePropertyChanged()
+    {
+        RaycastHit hitInfo;
+        Physics.Raycast(rayCastOrigin.position, Vector3.down, out hitInfo, 0.01f);
+
+        if (hitInfo.collider is null)
+            return;
+
+        PropertyChanged?.Invoke(hitInfo.collider.gameObject.GetComponent<Platform>().Distance);
+    }
+
     Vector3 vel = new();
+
+    public event Action<float> PropertyChanged;
 
 
 
@@ -40,10 +75,10 @@ public class PlayerBeha : MonoBehaviour
     void Update()
     {
         //Jumpe
-        if (isGrounded && Input.GetKeyDown(KeyCode.Space))
+        if (IsGrounded && Input.GetKeyDown(KeyCode.Space))
         {
             playerMove.AddForce(transform.up * jumpForce);
-            isGrounded = false;
+            m_jump.Play();
         }
 
         // Directional Movement
@@ -67,13 +102,13 @@ public class PlayerBeha : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (Physics.Raycast(rayCastOrigin.position, Vector3.down, 0.01f)) //0.01f hat sich als gut erwiesen
+        if (Physics.Raycast(rayCastOrigin.position, Vector3.down, 0.01f) && Mathf.Abs(playerMove.velocity.y) < 0.01f) //0.01f hat sich als gut erwiesen
         {
-            isGrounded = true;
+            IsGrounded = true;
         }
         else
         {
-            isGrounded = false;
+            IsGrounded = false;
         }
     }
 }
