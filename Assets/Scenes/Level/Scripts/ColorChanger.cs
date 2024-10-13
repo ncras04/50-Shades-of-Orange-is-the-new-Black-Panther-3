@@ -48,7 +48,7 @@ public class ColorChanger : MonoBehaviour, INotifyProperty<Color>
         Vector2 currentVal = new Vector2(m_currentPos, 0);
         Vector2 tgtVal = new Vector2(_playerPos, 0);
         Vector2 vel = Vector2.zero;
-        Color resultColor;
+        Color resultColor = Color.black;
         float smoothTime = 0.5f;
 
         while (true)
