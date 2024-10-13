@@ -20,6 +20,10 @@ public class Platform : MonoBehaviour
     [SerializeField]
     private Color m_color;
 
+    public int ColorIndex;
+
+    public ColorArray array;
+
     public Color Color
     {
         get => m_color;
@@ -40,7 +44,7 @@ public class Platform : MonoBehaviour
         if (startPlatform is not null)
             m_distance = Vector3.Distance(transform.position, startPlatform.position) / Vector3.Distance(startPlatform.position, endPlatform.position);
 
-        GetComponent<MeshRenderer>().material.SetColor("_Color", m_color);
+        GetComponent<MeshRenderer>().material.SetColor("_Color", array.colors[ColorIndex]);
     }
 
     private void OnEnable()
