@@ -680,7 +680,7 @@ GameObject:
   - component: {fileID: 220433710}
   - component: {fileID: 220433712}
   - component: {fileID: 220433711}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: vfx
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2578,7 +2578,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15c82ca4121da2940ad10ccb88377a82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  manager: {fileID: 0}
+  manager: {fileID: 1310650636}
   nextScene: 3
 --- !u!1 &1734903230
 GameObject:

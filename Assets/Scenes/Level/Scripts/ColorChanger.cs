@@ -39,19 +39,20 @@ public class ColorChanger : MonoBehaviour, INotifyProperty<Color>
     }
 
     public void OnPlayerPositionChanged(float _playerPos)
-    {
+    { 
         StartCoroutine(SetBGColor(_playerPos));
     }
 
     private IEnumerator SetBGColor(float _playerPos)
     {
+        float TIME = 0.0f;
         Vector2 currentVal = new Vector2(m_currentPos, 0);
         Vector2 tgtVal = new Vector2(_playerPos, 0);
         Vector2 vel = Vector2.zero;
         Color resultColor = Color.black;
         float smoothTime = 0.5f;
 
-        while (true)
+        while (TIME < 0.7f)
         {
             currentVal = Vector2.SmoothDamp(currentVal, tgtVal, ref vel, smoothTime);
 
@@ -59,9 +60,8 @@ public class ColorChanger : MonoBehaviour, INotifyProperty<Color>
             m_skyboxMaterial.SetColor("_ColorMax", resultColor);
             PropertyChanged?.Invoke(resultColor);
 
-            if (MathF.Round(vel.x, 3) == 0.0f)
-                break;
-
+            TIME += Time.deltaTime;
+            Debug.Log(TIME);
             yield return null;
         }
 
